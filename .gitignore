@@ -1,0 +1,11 @@
+# Java
+target/
+
+# Eclipse
+.settings
+.project
+.classpath
+
+# Intellij
+*.iml
+.idea/
