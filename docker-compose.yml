@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+  db:
+    image: postgres:10.0-alpine
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-q", "-d", "postgres", "-U", "root" ]
+      timeout: 45s
+      interval: 10s
+      retries: 10
+    environment:
+      PGDATA: /var/lib/postgresql/pgdata
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      APP_DB_USER: ${APP_DB_USER}
+      APP_DB_PASS: ${APP_DB_PASS}
+      APP_DB_NAME: ${APP_DB_NAME}
+    ports:
+      - 5432:5432
+    networks:
+      - db
+    restart: unless-stopped
+    volumes:
+      - ./data/init:/docker-entrypoint-initdb.d/
+      - ./data/db:/var/lib/postgresql/pgdata
+networks:
+  db:
+    driver: bridge
